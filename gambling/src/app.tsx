@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import "./styles.css"; // Ensure styles are included
+import RouletteWheel from "../components/RouletteWheel"; // Import the spinning wheel component
+
+const segments = [
+  "0", "32", "15", "19", "4", "21", "2", "25", "17", "34",
+  "6", "27", "13", "36", "11", "30", "8", "23", "10", "5",
+  "24", "16", "33", "1", "20", "14", "31", "9", "22", "18",
+  "29", "7", "28", "12", "35", "3", "26"
+];
 
 interface Bet {
   type: string;
@@ -11,13 +20,14 @@ const RouletteGame: React.FC = () => {
   const [winningNumber, setWinningNumber] = useState<number | null>(null);
   const [outcome, setOutcome] = useState<string>("");
 
-  const spinWheel = () => {
-    const randomNumber = Math.floor(Math.random() * 37); // Numbers 0-36
-    
+  // Handle result from the RouletteWheel
+  const handleResult = (winningSegment: string) => {
+    const randomNumber = parseInt(winningSegment); // Convert segment to number
     setWinningNumber(randomNumber);
-    const color = getColor(randomNumber);
 
+    const color = getColor(randomNumber);
     let isWin = false;
+
     if (bet.type === "red" && color === "Red") isWin = true;
     if (bet.type === "black" && color === "Black") isWin = true;
     if (bet.type === "even" && randomNumber % 2 === 0 && randomNumber !== 0) isWin = true;
@@ -31,6 +41,7 @@ const RouletteGame: React.FC = () => {
     );
   };
 
+  // Determine the color of a segment
   const getColor = (number: number): string => {
     if (number === 0) return "Green";
     return number % 2 === 0 ? "Black" : "Red";
@@ -47,12 +58,10 @@ const RouletteGame: React.FC = () => {
   return (
     <div id="roulette-container">
       <h1>European Roulette</h1>
-      <div id="wheel-section">
-        <div id="roulette-wheel"></div>
-        <button id="spin-button" onClick={spinWheel}>
-          Spin the Wheel
-        </button>
-      </div>
+      {/* Roulette Wheel Component */}
+      <RouletteWheel segments={segments} onResult={handleResult} />
+
+      {/* Betting Area */}
       <div id="betting-area">
         <h2>Place Your Bets</h2>
         <div className="bet-options">
@@ -92,6 +101,8 @@ const RouletteGame: React.FC = () => {
           </label>
         </div>
       </div>
+
+      {/* Results Section */}
       <div id="result">
         <h2>Results</h2>
         {winningNumber !== null && <p>The wheel landed on {winningNumber}</p>}
