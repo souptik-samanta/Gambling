@@ -104,6 +104,8 @@ const RouletteGame: React.FC = () => {
 
       {/* Results Section */}
       <div id="result">
+      <footer><strong>"A winner never quits and a quitter never wins. ..."</strong>
+      said by a <s>gambler</s> <b>Winner</b></footer>
         <h2>Results</h2>
         {winningNumber !== null && <p>The wheel landed on {winningNumber}</p>}
         <p>{outcome}</p>
